@@ -1,0 +1,15 @@
+Progettare una prima strategia super semplice per mettere in piedi la struttura
+Strategia:
+    - Descrizione:
+        - la strategia entra quando due medie mobili si incrociano
+        - esce quando due medie mobili si incrociano al contrario o TP o SL
+    - parametri:
+        - Time frame: 1 3 5 15 30 60 120 240 360 720 (min) D (day) W (week) M (month)
+        - Periodi media mobile veloce
+        - Periodi media mobile lenta
+Caratteristiche:
+    - la strategia viene lanciata da un programma, il quale si aspetta di poterla lanciare:
+        - nel passato: in questo caso vanno definiti data inizio e data fine, 
+            con la possibilita di definire dei loop di ottimizzazione parametri
+        - a mercato con parametri fissati
+        
