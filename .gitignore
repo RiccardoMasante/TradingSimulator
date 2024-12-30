@@ -1,3 +1,7 @@
 __pycache__/
 chiavi.txt
 chiavi*
+*.json
+**.json
+result/
+database/
