@@ -1,8 +1,7 @@
 import os,sys
-current_path = os.getcwd() 
-sys.path.insert(0,current_path + r"/../pybit")  
+sys.path.insert(0,os.getcwd()  + r"/../pybit")  
 from pybit.unified_trading import HTTP
-sys.path.insert(0,current_path + r"/..")  
+sys.path.insert(0,os.getcwd()  + r"/..")  
 import chiavi
 
 session = HTTP(

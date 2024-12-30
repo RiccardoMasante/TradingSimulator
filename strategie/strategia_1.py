@@ -1,8 +1,8 @@
+import os,sys
 import datetime
 import time
 from dateutil.relativedelta import relativedelta
-current_path = os.getcwd() 
-sys.path.insert(0,current_path + r"/../lib")
+sys.path.insert(0,os.getcwd() + r"/../lib")
 import simulator
 #now = datetime.datetime.now()
 #print(int(time.time()*1000))
@@ -10,7 +10,7 @@ import simulator
 #print (datetime.datetime.fromtimestamp(int(time.time()*1000) / 1000.0, tz=datetime.timezone.utc))
 #print(type(datetime.datetime.fromtimestamp(int(time.time()*1000) / 1000.0, tz=datetime.timezone.utc)))
 class strategia():
-    def __init__(self,a_mercato,time_inizio=datetime.datetime.now()- relativedelta(months=2),time_fine=datetime.datetime.now(),time_frame=1,symbol="BTCUSDT",params={}):
+    def __init__(self,a_mercato,time_inizio=datetime.datetime.now()- relativedelta(days=1),time_fine=datetime.datetime.now(),time_frame=1,symbol="BTCUSDT",params={}):
         
         self.a_mercato = a_mercato
         #TODO aggiungere tutti i check di validita
@@ -29,7 +29,7 @@ class strategia():
            
 
         # inizializzare il simulatore al tempo di inizio, con tutte le candele necessarie scaricate in RAM
-        sim = simulator.Simulator(time_inizio,time_fine,time_frame,a_mercato,symbol,starting_index = self.pmml,portafoglio={"USDT":200})
+        self.sim = simulator.Simulator(time_inizio,time_fine,time_frame,a_mercato,symbol,starting_index = self.pmml,portafoglio={"USDT":200},name="strategia_1")
 
         self.mml_value = 0
         self.mmv_value = 0
@@ -43,38 +43,44 @@ class strategia():
         else:
             return default_value
 
-    def run():
+    def run(self):
         while(1):
 
             #aspetta chiusura candela
-            sim.wait_next_candle()
+            self.sim.wait_next_candle()
 
             # se a_mercato == false interrogare il simulatore se abbiamo finito per chiudere il loop
             if self.a_mercato == False:
-                if sim.finish():
+                if self.sim.finish():
                     break
 
             #scarica le ultime pmml candele
-            candles = sim.download_n_candles(self.symbol,self.pmml,self.time_frame)
+            candles = self.sim.download_n_candles(self.symbol,self.pmml,self.time_frame)
             
             #nello stesso loop
                 #calcola media mobile veloce
                 #calcola media mobile lenta
             temp_sum = 0
-            for i in range(0,pmml):
-                temp_sum+=candles[i]["c"]
-                if i == pmmv-1:
-                    self.mmv_value = temp_sum/pmmv
-            self.mml_value = temp_sum/pmml
+            #print(candles)
+            for i in range(0,self.pmml):
+                
+                temp_sum+=candles[i]["o"]
+                if i == self.pmmv-1:
+                    self.mmv_value = temp_sum/self.pmmv
+            self.mml_value = temp_sum/self.pmml
 
             #se la media mobile si è incrociata entrare a mercato con ordine e TP e SL definiti
             if self.mmv_value > self.mml_value and self.mmv_value_prev < self.mml_value_prev:
                 # entra_long
-                sim.open_market_long(self.symbol,self.rel_SL,self.rel_TP,self.order_qty_usdt)
+                abs_TP = candles[0]["o"]*self.rel_TP
+                abs_SL = candles[0]["o"]*self.rel_SL
+                self.sim.open_market_long(self.symbol,abs_SL,abs_TP,self.order_qty_usdt)
                 pass
             if self.mmv_value < self.mml_value and self.mmv_value_prev > self.mml_value_prev:
                 # entra_short
-                sim.open_market_short(self.symbol,self.rel_SL,self.rel_TP,self.order_qty_usdt)
+                abs_TP = candles[0]["o"]/self.rel_TP
+                abs_SL = candles[0]["o"]/self.rel_SL
+                self.sim.open_market_short(self.symbol,abs_SL,abs_TP,self.order_qty_usdt)
                 pass
 
             #salva valore precedente media mobile veloce
