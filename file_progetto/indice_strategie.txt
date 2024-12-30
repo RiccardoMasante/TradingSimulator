@@ -1,0 +1,2 @@
+strategia_1:
+    - Strategia di test (vedi obbiettivi.txt)

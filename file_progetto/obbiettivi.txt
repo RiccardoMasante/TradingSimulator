@@ -12,4 +12,7 @@ Caratteristiche:
         - nel passato: in questo caso vanno definiti data inizio e data fine, 
             con la possibilita di definire dei loop di ottimizzazione parametri
         - a mercato con parametri fissati
-        
+Exchange:
+    - Per adesso solo bybit. 
+        - tutte le chiamate a socket devono essere circoscritte in modo da poterle 
+          facilmente estendere per altri exchange

@@ -1,0 +1,5 @@
+Short dopo pagamento funding:
+    - scalping aggressivo short nei 10 secondi dopo il pagamento di funding negativi
+Long di accumulazione:
+    - studiare linearita delle candele con minimo relativo sulle candele a 1 minuto
+    - parametro numero di candele all'intorno per definire minimo relativo 
